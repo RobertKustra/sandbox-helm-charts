@@ -1,0 +1,19 @@
+image:
+  repository: redis
+  tag: "7.2.5"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 6379
+
+auth:
+  enabled: false
+  existingSecret: redis-auth
+  existingSecretPasswordKey: redis-password
+
+master:
+  persistence:
+    enabled: false
+    size: 8Gi
+    storageClass: ""
