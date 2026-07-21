@@ -9,8 +9,8 @@ service:
 
 auth:
   enabled: false
-  existingSecret: redis-auth
-  existingSecretPasswordKey: redis-password
+  existingSecret: sandbox-redis-auth
+  existingSecretPasswordKey: sandbox-redis-password
 
 master:
   persistence:

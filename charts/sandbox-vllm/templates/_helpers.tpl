@@ -1,8 +1,8 @@
-{{- define "redis.name" -}}
+{{- define "sandbox-vllm.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "redis.fullname" -}}
+{{- define "sandbox-vllm.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -15,10 +15,9 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "redis.labels" -}}
+{{- define "sandbox-vllm.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-app.kubernetes.io/name: {{ include "redis.name" . }}
+app.kubernetes.io/name: {{ include "sandbox-vllm.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}

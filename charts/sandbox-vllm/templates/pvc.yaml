@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Values.persistence.claimName }}
   labels:
-    {{- include "vllm.labels" . | nindent 4 }}
+    {{- include "sandbox-vllm.labels" . | nindent 4 }}
 spec:
   accessModes:
     {{- toYaml .Values.persistence.accessModes | nindent 4 }}

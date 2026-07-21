@@ -59,7 +59,7 @@ resources:
 
 persistence:
   enabled: true
-  claimName: vllm-model-cache
+  claimName: sandbox-vllm-model-cache
   accessModes:
     - ReadWriteOnce
   size: 30Gi

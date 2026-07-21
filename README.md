@@ -5,7 +5,7 @@ Shared Helm charts for the Sandbox platform.
 ## Structure
 
 - charts/sandbox-nginx/ - example application chart used by Flux
-- charts/redis/ - Redis chart used by Flux for in-cluster Redis deployments
+- charts/sandbox-redis/ - Redis chart used by Flux for in-cluster Redis deployments
 
 ## Workflow
 
