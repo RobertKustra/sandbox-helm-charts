@@ -1,5 +1,5 @@
 apiVersion: v2
-name: sandbox-app
+name: sandbox-nginx
 description: Example application chart for Sandbox platform
 type: application
 version: 0.1.0

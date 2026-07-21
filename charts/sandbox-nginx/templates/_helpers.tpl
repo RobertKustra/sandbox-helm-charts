@@ -1,12 +1,12 @@
-{{- define "sandbox-app.name" -}}
+{{- define "sandbox-nginx.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "sandbox-app.fullname" -}}
+{{- define "sandbox-nginx.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- $name := include "sandbox-app.name" . -}}
+{{- $name := include "sandbox-nginx.name" . -}}
 {{- if contains $name .Release.Name -}}
 {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -15,9 +15,9 @@
 {{- end -}}
 {{- end -}}
 
-{{- define "sandbox-app.labels" -}}
+{{- define "sandbox-nginx.labels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-app.kubernetes.io/name: {{ include "sandbox-app.name" . }}
+app.kubernetes.io/name: {{ include "sandbox-nginx.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
