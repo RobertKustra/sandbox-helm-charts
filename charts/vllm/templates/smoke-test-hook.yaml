@@ -2,15 +2,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "vllm.fullname" . }}-smoke-test
+  name: {{ include "vllm.fullname" . }}-smoke-test-r{{ .Release.Revision }}
   labels:
     {{- include "vllm.labels" . | nindent 4 }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 spec:
   backoffLimit: 0
-  ttlSecondsAfterFinished: 300
   template:
     metadata:
       labels:
