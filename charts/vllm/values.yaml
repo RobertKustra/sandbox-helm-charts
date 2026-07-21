@@ -1,0 +1,80 @@
+replicaCount: 1
+
+image:
+  repository: vllm/vllm-openai
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+model:
+  args:
+    - Qwen/Qwen2.5-1.5B-Instruct
+    - --host
+    - 0.0.0.0
+    - --port
+    - "8000"
+    - --dtype
+    - half
+    - --max-model-len
+    - "4096"
+    - --max-num-seqs
+    - "4"
+    - --gpu-memory-utilization
+    - "0.65"
+
+env:
+  - name: VLLM_USE_V2_MODEL_RUNNER
+    value: "0"
+  - name: PYTORCH_CUDA_ALLOC_CONF
+    value: "expandable_segments:True"
+
+probes:
+  startup:
+    initialDelaySeconds: 30
+    periodSeconds: 15
+    failureThreshold: 120
+    timeoutSeconds: 5
+  readiness:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    failureThreshold: 6
+    timeoutSeconds: 3
+  liveness:
+    initialDelaySeconds: 15
+    periodSeconds: 20
+    failureThreshold: 3
+    timeoutSeconds: 3
+
+resources:
+  requests:
+    cpu: "2"
+    memory: 4Gi
+  limits:
+    cpu: "4"
+    memory: 8Gi
+    nvidia.com/gpu: 1
+
+persistence:
+  enabled: true
+  claimName: vllm-model-cache
+  accessModes:
+    - ReadWriteOnce
+  size: 30Gi
+  mountPath: /root/.cache/huggingface
+
+shm:
+  enabled: true
+  mountPath: /dev/shm
+  sizeLimit: 2Gi
+
+smokeTest:
+  enabled: true
+  image:
+    repository: curlimages/curl
+    tag: "8.9.1"
+    pullPolicy: IfNotPresent
+  retries: 30
+  sleepSeconds: 5

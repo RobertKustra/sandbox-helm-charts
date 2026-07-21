@@ -1,0 +1,40 @@
+{{- if .Values.smokeTest.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "vllm.fullname" . }}-smoke-test
+  labels:
+    {{- include "vllm.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "vllm.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: smoke-test
+          image: "{{ .Values.smokeTest.image.repository }}:{{ .Values.smokeTest.image.tag }}"
+          imagePullPolicy: {{ .Values.smokeTest.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              for i in $(seq 1 {{ .Values.smokeTest.retries }}); do
+                if curl -fsS http://{{ include "vllm.fullname" . }}:{{ .Values.service.port }}/health > /dev/null; then
+                  echo "vLLM health endpoint is ready"
+                  exit 0
+                fi
+                echo "Waiting for vLLM health endpoint... attempt $i/{{ .Values.smokeTest.retries }}"
+                sleep {{ .Values.smokeTest.sleepSeconds }}
+              done
+              echo "Smoke test failed: /health endpoint is not ready"
+              exit 1
+{{- end }}
