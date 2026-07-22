@@ -14,7 +14,7 @@ service:
 env:
   config:
     VLLM_BASE_URL: http://sandbox-vllm.llm.svc.cluster.local:8000
-    VLLM_MODEL: Qwen/Qwen2.5-Coder-3B-Instruct
+    VLLM_MODEL: Qwen/Qwen2.5-Coder-1.5B-Instruct
     VLLM_STRESS: "false"
     VLLM_COUNT: "50"
     VLLM_PARALLEL: "8"
