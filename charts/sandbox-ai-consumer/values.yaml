@@ -1,10 +1,23 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: "1.25"
+  repository: ghcr.io/robertkustra/dev/sandbox-ai-consumer
+  tag: "0.1.1"
   pullPolicy: IfNotPresent
 
 service:
+  enabled: false
   type: ClusterIP
   port: 80
+
+env:
+  config:
+    VLLM_BASE_URL: http://sandbox-vllm.llm.svc.cluster.local:8000
+    VLLM_MODEL: Qwen/Qwen2.5-Coder-3B-Instruct
+    VLLM_STRESS: "false"
+    VLLM_COUNT: "50"
+    VLLM_PARALLEL: "8"
+    VLLM_REPEAT_MINUTES: "5"
+  secret:
+    name: sandbox-ai-consumer-env
+    promptKey: VLLM_PROMPT
