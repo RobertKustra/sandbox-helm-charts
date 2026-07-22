@@ -30,3 +30,24 @@ flux reconcile kustomization sandbox-cluster-config -n flux-system --with-source
 flux reconcile source git sandbox-env-values -n flux-system
 flux reconcile kustomization sandbox-env-values-dev -n flux-system --with-source
 ```
+
+## Flux troubleshooting (charts)
+
+If reconcile succeeds but chart changes are not visible in workloads:
+
+```bash
+# Check fetched revisions and readiness
+flux get sources git -n flux-system
+flux get kustomizations -n flux-system
+flux get helmreleases -A
+
+# Inspect detailed status for the app release
+flux describe helmrelease sandbox-ai-consumer -n default
+
+# Force source refresh + cluster reconcile
+flux reconcile source git sandbox-helm-charts -n flux-system
+flux reconcile source git sandbox-cluster-config -n flux-system
+flux reconcile kustomization sandbox-cluster-config -n flux-system --with-source
+```
+
+Most common reason: chart templates changed, but chart version was not bumped in `Chart.yaml`, or HelmRelease still points to an older `spec.chart.spec.version`.
