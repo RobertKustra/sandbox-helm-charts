@@ -29,10 +29,3 @@ spec:
             - name: {{ $key }}
               value: {{ $value | quote }}
             {{- end }}
-            {{- if and .Values.env.secret.name .Values.env.secret.promptKey }}
-            - name: VLLM_PROMPT
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.env.secret.name }}
-                  key: {{ .Values.env.secret.promptKey }}
-            {{- end }}

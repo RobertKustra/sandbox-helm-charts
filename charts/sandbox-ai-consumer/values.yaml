@@ -19,6 +19,4 @@ env:
     VLLM_COUNT: "50"
     VLLM_PARALLEL: "8"
     VLLM_REPEAT_MINUTES: "5"
-  secret:
-    name: sandbox-ai-consumer-env
-    promptKey: VLLM_PROMPT
+    VLLM_PROMPT: "Will AI replace humans in the future?"
