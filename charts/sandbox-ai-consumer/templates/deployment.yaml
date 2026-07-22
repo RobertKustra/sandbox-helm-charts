@@ -16,6 +16,10 @@ spec:
         app.kubernetes.io/name: {{ include "sandbox-ai-consumer .name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: sandbox-ai-consumer 
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
