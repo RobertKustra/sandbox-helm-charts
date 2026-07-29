@@ -14,7 +14,7 @@ model:
   args:
     # The model to use. You can find available models at https://huggingface.co/models?pipeline_tag=text-generation&sort=downloads
     # depends on your graphics card and memory, you may want to use a smaller model. For example, if you have a 12GB GPU, you can use Qwen/Qwen2.5-Coder-3B-Instruct or Qwen/Qwen2.5-1.5B-Instruct.
-    - Qwen/Qwen2.5-1.5B-Instruct
+    - Qwen/Qwen3-4B-Instruct-2507
     - --host
     - 0.0.0.0
     - --port
