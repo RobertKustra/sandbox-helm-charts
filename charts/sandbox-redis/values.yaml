@@ -17,3 +17,5 @@ master:
     enabled: false
     size: 8Gi
     storageClass: ""
+
+resources: {}
