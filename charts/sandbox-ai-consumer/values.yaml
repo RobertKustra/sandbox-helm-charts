@@ -20,3 +20,5 @@ env:
     VLLM_PARALLEL: "8"
     VLLM_REPEAT_MINUTES: "5"
     VLLM_PROMPT: "Will AI replace humans in the future?"
+
+resources: {}
