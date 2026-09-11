@@ -6,6 +6,7 @@ metadata:
     {{- include "sandbox-vllm.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  progressDeadlineSeconds: {{ .Values.deployment.progressDeadlineSeconds }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "sandbox-vllm.name" . }}

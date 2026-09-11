@@ -1,5 +1,8 @@
 replicaCount: 1
 
+deployment:
+  progressDeadlineSeconds: 2400
+
 image:
   repository: vllm/vllm-openai
   tag: latest
