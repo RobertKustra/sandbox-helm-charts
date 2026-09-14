@@ -18,6 +18,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       enableServiceLinks: false
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: sandbox-vllm
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

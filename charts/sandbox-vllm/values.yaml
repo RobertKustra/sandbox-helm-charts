@@ -3,6 +3,8 @@ replicaCount: 1
 deployment:
   progressDeadlineSeconds: 2400
 
+affinity: {}
+
 image:
   repository: vllm/vllm-openai
   tag: latest
@@ -67,6 +69,7 @@ resources:
 persistence:
   enabled: true
   claimName: sandbox-vllm-model-cache
+  storageClass: ""
   accessModes:
     - ReadWriteOnce
   size: 30Gi
