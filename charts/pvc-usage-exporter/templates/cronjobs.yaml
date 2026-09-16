@@ -25,9 +25,10 @@ spec:
                 - |
                   used_kib=$(du -sk /volume | awk '{print $1}')
                   used_bytes=$((used_kib * 1024))
+                  printf 'pvc_directory_used_bytes %s\n' "$used_bytes" > /tmp/metrics
                   wget -qO- \
                     --header='Content-Type: text/plain; version=0.0.4' \
-                    --post-data="pvc_directory_used_bytes $used_bytes" \
+                    --post-file=/tmp/metrics \
                     "{{ $.Values.pushgatewayUrl }}/metrics/job/pvc-directory-usage/namespace/$POD_NAMESPACE/persistentvolumeclaim/$PVC_NAME"
               env:
                 - name: POD_NAMESPACE
@@ -45,9 +46,13 @@ spec:
                 - name: volume
                   mountPath: /volume
                   readOnly: true
+                - name: tmp
+                  mountPath: /tmp
           volumes:
             - name: volume
               persistentVolumeClaim:
                 claimName: {{ .claimName | quote }}
                 readOnly: true
+            - name: tmp
+              emptyDir: {}
 {{- end }}
