@@ -1,0 +1,53 @@
+{{- range .Values.pvcs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pvc-usage-{{ .name }}
+spec:
+  schedule: {{ $.Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 300
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: pvc-usage-exporter
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  used_kib=$(du -sk /volume | awk '{print $1}')
+                  used_bytes=$((used_kib * 1024))
+                  wget -qO- \
+                    --header='Content-Type: text/plain; version=0.0.4' \
+                    --post-data="pvc_directory_used_bytes $used_bytes" \
+                    "{{ $.Values.pushgatewayUrl }}/metrics/job/pvc-directory-usage/namespace/$POD_NAMESPACE/persistentvolumeclaim/$PVC_NAME"
+              env:
+                - name: POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: PVC_NAME
+                  value: {{ .claimName | quote }}
+              resources:
+                {{- toYaml $.Values.resources | nindent 16 }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: volume
+                  mountPath: /volume
+                  readOnly: true
+          volumes:
+            - name: volume
+              persistentVolumeClaim:
+                claimName: {{ .claimName | quote }}
+                readOnly: true
+{{- end }}

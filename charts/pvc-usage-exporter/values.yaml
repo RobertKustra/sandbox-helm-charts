@@ -1,0 +1,18 @@
+schedule: "*/5 * * * *"
+
+image:
+  repository: alpine
+  tag: "3.22"
+  pullPolicy: IfNotPresent
+
+pushgatewayUrl: http://prometheus-prometheus-pushgateway.monitoring.svc:9091
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 200m
+    memory: 64Mi
+
+pvcs: []
