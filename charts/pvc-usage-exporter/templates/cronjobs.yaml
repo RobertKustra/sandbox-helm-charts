@@ -25,6 +25,8 @@ spec:
                 - |
                   used_kib=$(du -sk /volume | awk '{print $1}')
                   used_bytes=$((used_kib * 1024))
+                  used_gib=$(awk -v kib="$used_kib" 'BEGIN { printf "%.2f", kib / 1048576 }')
+                  printf 'PVC usage: namespace=%s pvc=%s used_gib=%s used_bytes=%s\n' "$POD_NAMESPACE" "$PVC_NAME" "$used_gib" "$used_bytes"
                   printf 'pvc_directory_used_bytes %s\n' "$used_bytes" > /tmp/metrics
                   wget -qO- \
                     --header='Content-Type: text/plain; version=0.0.4' \
