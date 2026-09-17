@@ -7,7 +7,7 @@ Shared Helm charts for the Sandbox platform.
 - charts/sandbox-nginx/ - example application chart used by Flux
 - charts/sandbox-redis/ - Redis chart used by Flux for in-cluster Redis deployments
 - charts/sandbox-vllm/ - vLLM inference chart with post-install/post-upgrade smoke test hook
-- charts/sandbox-langfuse/ - Langfuse wrapper chart with Minikube storage and ingress defaults
+- charts/sandbox-langfuse/ - version-pinned wrapper for the upstream Langfuse chart
 
 ## Workflow
 
