@@ -1,0 +1,42 @@
+langfuse:
+  global:
+    defaultStorageClass: csi-hostpath-sc
+  langfuse:
+    nextauth:
+      url: https://langfuse.local
+    ingress:
+      enabled: true
+      className: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: sandbox-ca-issuer
+      hosts:
+        - host: langfuse.local
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        enabled: true
+        secretName: langfuse-tls
+  postgresql:
+    storage:
+      requestedSize: 5Gi
+      className: csi-hostpath-sc
+  redis:
+    dataStorage:
+      requestedSize: 2Gi
+      className: csi-hostpath-sc
+  clickhouse:
+    cluster:
+      storage:
+        size: 10Gi
+        className: csi-hostpath-sc
+    keeper:
+      replicas: 1
+      storage:
+        size: 2Gi
+        className: csi-hostpath-sc
+  s3:
+    allInOne:
+      data:
+        size: 5Gi
+        storageClass: csi-hostpath-sc

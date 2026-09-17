@@ -1,0 +1,10 @@
+apiVersion: v2
+name: sandbox-langfuse
+description: Langfuse observability platform chart for Sandbox
+type: application
+version: 0.1.0
+appVersion: "4"
+dependencies:
+  - name: langfuse
+    version: "2.0.0"
+    repository: oci://ghcr.io/langfuse/langfuse-k8s/charts
