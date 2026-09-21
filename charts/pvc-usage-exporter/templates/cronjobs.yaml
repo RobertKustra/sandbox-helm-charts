@@ -1,4 +1,31 @@
+{{- $pvcs := list }}
+{{- $seenClaimNames := dict }}
 {{- range .Values.pvcs }}
+  {{- if not (hasKey $seenClaimNames .claimName) }}
+    {{- $pvcs = append $pvcs . }}
+    {{- $_ := set $seenClaimNames .claimName true }}
+  {{- end }}
+{{- end }}
+{{- $existingPvcs := lookup "v1" "PersistentVolumeClaim" .Release.Namespace "" }}
+{{- range $selector := .Values.pvcSelectors }}
+  {{- if not $selector.matchLabels }}
+    {{- fail "each pvcSelectors entry must define at least one matchLabels value" }}
+  {{- end }}
+  {{- range $pvc := $existingPvcs.items }}
+    {{- $matches := true }}
+    {{- $labels := default dict $pvc.metadata.labels }}
+    {{- range $key, $value := $selector.matchLabels }}
+      {{- if ne (toString (index $labels $key)) (toString $value) }}
+        {{- $matches = false }}
+      {{- end }}
+    {{- end }}
+    {{- if and $matches (not (hasKey $seenClaimNames $pvc.metadata.name)) }}
+      {{- $pvcs = append $pvcs (dict "name" $pvc.metadata.name "claimName" $pvc.metadata.name) }}
+      {{- $_ := set $seenClaimNames $pvc.metadata.name true }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- range $pvcs }}
 ---
 apiVersion: batch/v1
 kind: CronJob

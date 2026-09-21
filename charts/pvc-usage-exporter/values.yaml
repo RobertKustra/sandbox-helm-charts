@@ -16,3 +16,5 @@ resources:
     memory: 64Mi
 
 pvcs: []
+
+pvcSelectors: []
