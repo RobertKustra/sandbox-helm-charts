@@ -27,9 +27,10 @@ flux reconcile source git sandbox-cluster-config -n flux-system
 # Reconcile main cluster kustomization
 flux reconcile kustomization sandbox-cluster-config -n flux-system --with-source
 
-# Optional: reconcile env values source and selected env overlay
+# Optional: reconcile env values source and selected namespace/application stages
 flux reconcile source git sandbox-env-values -n flux-system
-flux reconcile kustomization sandbox-env-values-dev -n flux-system --with-source
+flux reconcile kustomization sandbox-namespace-dev -n flux-system --with-source
+flux reconcile kustomization sandbox-nginx-values-dev -n flux-system --with-source
 ```
 
 ## Flux troubleshooting (charts)
